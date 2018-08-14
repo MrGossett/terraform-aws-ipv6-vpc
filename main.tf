@@ -41,16 +41,16 @@ resource "aws_subnet" "net" {
   cidr_block      = "${cidrsubnet(aws_vpc.vpc.cidr_block, local.cidr_bits, count.index)}"
   ipv6_cidr_block = "${cidrsubnet(aws_vpc.vpc.ipv6_cidr_block, 8, count.index)}"
 
-  map_public_ip_on_launch = "${var.public_tier == element(local.tiers, count.index/length(local.tiers)) ? "true" : "false"}"
+  map_public_ip_on_launch = "${var.public_tier == element(local.tiers, count.index/local.az_count) ? "true" : "false"}"
 
   assign_ipv6_address_on_creation = true
 
   tags = "${merge(
     map(
-      "Name", "${var.name} subnet - ${element(local.tiers, count.index/length(local.tiers))} in ${element(local.azs, count.index % local.az_count)}",
-      "Tier", "${element(local.tiers, count.index/length(local.tiers))}",
+      "Name", "${var.name} subnet - ${element(local.tiers, count.index/local.az_count)} in ${element(local.azs, count.index % local.az_count)}",
+      "Tier", "${element(local.tiers, count.index / local.az_count)}",
       "AZ", "${element(local.azs, count.index % local.az_count)}",
-      "Public", "${var.public_tier == element(local.tiers, count.index/length(local.tiers)) ? "true" : "false"}",
+      "Public", "${var.public_tier == element(local.tiers, count.index/local.az_count) ? "true" : "false"}",
     ),
     var.tags
   )}"

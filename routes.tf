@@ -4,7 +4,7 @@ resource "aws_route_table" "rtb" {
   vpc_id = "${aws_vpc.vpc.id}"
 
   tags = "${merge(
-    map("Name", "${var.name} route table - ${element(local.tiers, count.index/length(local.tiers))} in ${element(local.azs, count.index % local.az_count)}"),
+    map("Name", "${var.name} route table - ${element(local.tiers, count.index/local.az_count)} in ${element(local.azs, count.index % local.az_count)}"),
     var.tags
   )}"
 }

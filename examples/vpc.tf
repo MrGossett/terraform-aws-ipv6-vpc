@@ -3,5 +3,5 @@ module "ipv6-vpc" {
 
   name        = "example"
   public_tier = "dmz"
-  tiers       = ["app", "db", "svcs"]
+  tiers       = ["app", "store", "svcs"]
 }
